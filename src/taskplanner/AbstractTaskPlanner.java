@@ -10,8 +10,6 @@ public abstract class AbstractTaskPlanner implements TaskPlanner {
     public AbstractTaskPlanner() {
         this.tasks = new ArrayDeque<>();
     }
-    @Override
-    abstract public void execute();
 
     @Override
     public void add(final Task t) {
@@ -37,5 +35,5 @@ public abstract class AbstractTaskPlanner implements TaskPlanner {
     public int waiting() {
         return tasks.size();
     }
-    abstract public int countTasks(boolean isCompleted);
+    abstract protected int countTasks(boolean isCompleted);
 }

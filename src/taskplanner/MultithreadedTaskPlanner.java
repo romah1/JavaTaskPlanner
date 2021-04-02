@@ -2,6 +2,7 @@ package taskplanner;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,7 +54,7 @@ public class MultithreadedTaskPlanner extends AbstractTaskPlanner {
         private final Task mainTask;
 
         public TaskExecutor(final Task t) {
-            this.mainTask = t;
+            this.mainTask = Objects.requireNonNull(t);
         }
 
         @Override
