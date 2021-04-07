@@ -9,7 +9,25 @@ public interface TaskPlanner {
     // adds one task to the queue
     public void add(final Task t);
 
-    // adds a Collection os tasks in the queue
+    // repeat with interval
+    public void repeat(int ms);
+
+    // remove all tasks
+    public void remove();
+
+    // get amount of tasks
+    public int amountOfTasks();
+
+    // stop repeating (finishes all tasks)
+    public void stop();
+
+    // stop now
+    public void stopNow();
+
+    // execute after ms
+    public void executeWithDelay(int ms);
+
+    // adds a Collection of tasks in the queue
     public void add(final Collection<Task> tasks);
 
     // counts completed tasks
@@ -17,7 +35,4 @@ public interface TaskPlanner {
 
     // counts tasks which are in progress
     public int inProgress();
-
-    // counts tasks that are waiting in the queue
-    public int waiting();
 }

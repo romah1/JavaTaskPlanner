@@ -3,14 +3,10 @@ package taskplanner;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class MultithreadedTaskPlanner extends AbstractTaskPlanner {
-    private final LinkedList<Future<String>> invokedTasks = new LinkedList<>();
-
+    protected final LinkedList<Future<Task>> invokedTasks = new LinkedList<>();
     public MultithreadedTaskPlanner(final Collection<Task> tasks) {
         super(tasks);
     }
@@ -19,20 +15,20 @@ public class MultithreadedTaskPlanner extends AbstractTaskPlanner {
         super();
     }
 
+
     @Override
     public void execute() {
         ExecutorService mainExecutor = Executors.newCachedThreadPool();
-        for (Task t: this.tasks) {
+        for (Task t: tasks){
             invokedTasks.addLast(mainExecutor.submit(new TaskExecutor(t)));
         }
-        this.tasks.clear();
         mainExecutor.shutdown();
     }
 
     @Override
     public int countTasks(boolean isCompleted) {
         int c = 0;
-        for (Future<String> t: invokedTasks) {
+        for (Future<Task> t: invokedTasks) {
             if (t.isDone() == isCompleted) {
                 c++;
             }
@@ -45,12 +41,11 @@ public class MultithreadedTaskPlanner extends AbstractTaskPlanner {
         return "MultithreadedTaskPlanner{" +
                 "completed=" + completed() +
                 ", in progress=" + inProgress() +
-                ", waiting=" + waiting() +
                 '}';
     }
 
 
-    private static class TaskExecutor implements Callable<String> {
+    private static class TaskExecutor implements Callable<Task> {
         private final Task mainTask;
 
         public TaskExecutor(final Task t) {
@@ -58,7 +53,7 @@ public class MultithreadedTaskPlanner extends AbstractTaskPlanner {
         }
 
         @Override
-        public String call() throws Exception {
+        public Task call() throws Exception {
             if (mainTask.dependencies() != null) {
                 ExecutorService executor = Executors.newCachedThreadPool();
                 LinkedList<TaskExecutor> dependencies = new LinkedList<>();
@@ -69,7 +64,7 @@ public class MultithreadedTaskPlanner extends AbstractTaskPlanner {
                 executor.shutdown();
             }
             mainTask.execute();
-            return Thread.currentThread().getName();
+            return mainTask;
         }
     }
 }
