@@ -13,7 +13,7 @@ public interface TaskPlanner {
     public void repeat(int ms);
 
     // remove all tasks
-    public void remove();
+    public void clear();
 
     // get amount of tasks
     public int amountOfTasks();

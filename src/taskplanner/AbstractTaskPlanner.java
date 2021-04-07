@@ -43,7 +43,7 @@ public abstract class AbstractTaskPlanner implements TaskPlanner {
     }
 
     @Override
-    public void remove() {
+    public void clear() {
         tasks.clear();
     }
 
